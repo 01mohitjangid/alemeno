@@ -1,0 +1,25 @@
+# ---- Web / API ----
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+python-multipart==0.0.20          # multipart/form-data CSV uploads
+
+# ---- Database ----
+sqlalchemy==2.0.36
+alembic==1.14.0
+psycopg[binary]==3.2.3            # PostgreSQL driver (psycopg 3)
+
+# ---- Config ----
+pydantic==2.10.4
+pydantic-settings==2.7.1
+
+# ---- Job queue ----
+celery==5.4.0
+redis==5.2.1
+
+# ---- Data processing ----
+pandas==2.2.3
+python-dateutil==2.9.0.post0      # robust mixed-format date parsing
+
+# ---- LLM + resilience ----
+openai==1.59.6
+tenacity==9.0.0                   # exponential-backoff retries

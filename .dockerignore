@@ -1,0 +1,28 @@
+# Keep the image lean and free of secrets/local cruft.
+.git
+.gitignore
+.dockerignore
+
+# Secrets / local env (provided at runtime via compose environment)
+.env
+.env.local
+
+# Python caches / virtualenvs
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Runtime uploads (mounted as a volume, never baked in)
+uploads/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Docs/tests not needed at runtime
+*.md
