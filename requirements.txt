@@ -23,3 +23,6 @@ python-dateutil==2.9.0.post0      # robust mixed-format date parsing
 # ---- LLM + resilience ----
 openai==1.59.6
 tenacity==9.0.0                   # exponential-backoff retries
+
+# ---- Tests ----
+pytest==8.3.4
