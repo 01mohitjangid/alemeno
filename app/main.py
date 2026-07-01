@@ -1,11 +1,15 @@
 """FastAPI application entrypoint.
 
-Step 1 exposes a root and a health endpoint (with a live DB check). The job
-endpoints are mounted here in Step 2.
+Exposes the job API (app/api/routes/jobs.py), a health probe, and serves a
+lightweight static dashboard at /ui (with / redirecting to it).
 """
 from __future__ import annotations
 
+from pathlib import Path
+
 from fastapi import Depends, FastAPI
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
@@ -19,15 +23,10 @@ app = FastAPI(
         "queue (clean -> detect anomalies -> LLM classify -> summarise), and poll "
         "for structured results."
     ),
-    version="0.2.0",
+    version="0.3.0",
 )
 
 app.include_router(jobs.router)
-
-
-@app.get("/", tags=["meta"])
-def root() -> dict:
-    return {"service": "transaction-pipeline", "status": "ok", "docs": "/docs"}
 
 
 @app.get("/health", tags=["meta"])
@@ -35,3 +34,15 @@ def health(db: Session = Depends(get_db)) -> dict:
     """Liveness + DB connectivity probe."""
     db.execute(text("SELECT 1"))
     return {"status": "healthy", "database": "connected"}
+
+
+@app.get("/", include_in_schema=False)
+def root() -> RedirectResponse:
+    """Send the browser to the dashboard."""
+    return RedirectResponse(url="/ui/")
+
+
+# Static dashboard (single-page, no build step). Mounted last so it never
+# shadows the API routes above.
+_STATIC_DIR = Path(__file__).parent / "static"
+app.mount("/ui", StaticFiles(directory=str(_STATIC_DIR), html=True), name="ui")
